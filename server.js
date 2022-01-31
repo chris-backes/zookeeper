@@ -1,11 +1,12 @@
 const fs = require('fs');
 const path = require('path');
 const express = require("express");
+const { animals } = require("./data/animals");
+
 const PORT = process.env.PORT || 3001;
 const app = express();
 app.use(express.urlencoded({ extended: true}))
 app.use(express.json());
-const { animals } = require("./data/animals");
 
 function filterByQuery(query, animalsArray) {
 	let personalityTraitsArray = [];
@@ -94,9 +95,16 @@ app.post("/api/animals", (req, res) => {
 	if (!validateAnimal(req.body)) {
 		res.status(400).send('The animal is nor properyl formatted.');
 	} else {
-		const animal = createNewAnimal(req.body, animals)
+		const animal = createNewAnimal(req.body, animals);
 		res.json(animal);
 	}
+
+	  if (!validateAnimal(req.body)) {
+		res.status(400).send('The animal is not properly formatted.');
+	  } else {
+		const animal = createNewAnimal(req.body, animals);
+		res.json(animal);
+	  }
 });
 
 app.listen(PORT, () => {
